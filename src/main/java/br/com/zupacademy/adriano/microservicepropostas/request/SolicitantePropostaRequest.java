@@ -3,6 +3,7 @@ package br.com.zupacademy.adriano.microservicepropostas.request;
 import br.com.zupacademy.adriano.microservicepropostas.model.Endereco;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.CPFORCNPJ;
+import br.com.zupacademy.adriano.microservicepropostas.validacao.UniqueValue;
 
 import javax.persistence.Embedded;
 import javax.validation.constraints.Email;
@@ -17,6 +18,7 @@ public class SolicitantePropostaRequest {
 
     @CPFORCNPJ
     @NotBlank
+    @UniqueValue(domainClass = SolicitanteProposta.class, fieldName = "documento", message = "Não pode repetir a solicitação")
     private String documento;
 
     @NotBlank
