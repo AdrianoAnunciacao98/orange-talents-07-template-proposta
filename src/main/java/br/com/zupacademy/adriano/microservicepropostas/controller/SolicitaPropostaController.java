@@ -1,5 +1,7 @@
 package br.com.zupacademy.adriano.microservicepropostas.controller;
 
+import br.com.zupacademy.adriano.microservicepropostas.consultadados.PropostaService;
+import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoAnalise;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.repository.SolicitanteRepository;
 import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
@@ -13,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/solicitaProposta")
@@ -21,14 +24,20 @@ public class SolicitaPropostaController {
     @Autowired
     private SolicitanteRepository solicitanteRepository;
 
+    @Autowired
+    private PropostaService propostaService;
+
     @PostMapping
     public ResponseEntity<?> fazerProposta(@RequestBody @Valid SolicitantePropostaRequest req, UriComponentsBuilder uriBuilder){
-        SolicitanteProposta proposta = solicitanteRepository.save(req.toModel());
-        if(proposta == null){
+        Optional<SolicitanteProposta> proposta = solicitanteRepository.findByDocumento(req.getDocumento());
+
+        if(proposta.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
         else {
-            URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
+            SolicitanteProposta propostaa = solicitanteRepository.save(req.toModel());
+            EstadoAnalise estado = propostaService.getEstadoProposta(propostaa);
+            URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(propostaa.getId(),propostaa.getDocumento(), propostaa.getNome(), estado).toUri();
             return ResponseEntity.created(uri).build();
         }
 

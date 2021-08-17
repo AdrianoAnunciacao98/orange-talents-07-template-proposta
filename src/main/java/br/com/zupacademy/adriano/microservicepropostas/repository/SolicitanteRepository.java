@@ -8,4 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface SolicitanteRepository extends JpaRepository<SolicitanteProposta, Long> {
+    Optional<SolicitanteProposta> findByDocumento(String documento);
 }

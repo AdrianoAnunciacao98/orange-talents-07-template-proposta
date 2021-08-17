@@ -1,11 +1,13 @@
 package br.com.zupacademy.adriano.microservicepropostas.request;
 
+import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoAnalise;
 import br.com.zupacademy.adriano.microservicepropostas.model.Endereco;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.CPFORCNPJ;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.UniqueValue;
 
 import javax.persistence.Embedded;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,8 +35,11 @@ public class SolicitantePropostaRequest {
     @Positive
     private double salario;
 
+    @Enumerated
+    private EstadoAnalise analise;
+
     public SolicitanteProposta toModel(){
-        return new SolicitanteProposta(nome, salario, documento, endereco, email);
+        return new SolicitanteProposta(nome, salario, documento, endereco, email, analise);
     }
 
     public String getNome() {
@@ -55,5 +60,9 @@ public class SolicitantePropostaRequest {
 
     public double getSalario() {
         return salario;
+    }
+
+    public EstadoAnalise getAnalise() {
+        return analise;
     }
 }
