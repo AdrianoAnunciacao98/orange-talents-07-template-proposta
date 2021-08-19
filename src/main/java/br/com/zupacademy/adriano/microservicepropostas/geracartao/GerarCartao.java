@@ -18,7 +18,7 @@ public class GerarCartao {
     @Autowired
     private GerarCartaoApi gerarCartaoApi;
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 20000)
     @Transactional
     private void executarOperacao() {
         List<SolicitanteProposta> propostasElegiveis = solicitanteRepository.findAllByEstado(ELEGIVEL);

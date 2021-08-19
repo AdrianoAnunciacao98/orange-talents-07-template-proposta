@@ -3,6 +3,7 @@ package br.com.zupacademy.adriano.microservicepropostas.controller;
 import br.com.zupacademy.adriano.microservicepropostas.consultadados.AnaliseSolicitante;
 import br.com.zupacademy.adriano.microservicepropostas.consultadados.ConsultaDadosResponse;
 import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoProposta;
+import br.com.zupacademy.adriano.microservicepropostas.geracartao.EstadoPropostaResponse;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.repository.SolicitanteRepository;
 import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
@@ -53,6 +54,17 @@ public class SolicitaPropostaController {
             URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
             return ResponseEntity.created(uri).build();
         }
+
+
+    @GetMapping(path = "/{id}")
+    public EstadoPropostaResponse buscaEstadoProposta(@PathVariable("id") Long id) throws PropostaNotFoundException {
+        SolicitanteProposta proposta = solicitanteRepository.findById(id).orElseThrow(() -> new PropostaNotFoundException(id));
+        EstadoPropostaResponse response = new EstadoPropostaResponse(proposta.getId(), proposta.getNome(), proposta.getEstado());
+        return response;
+    }
+
+
+
 
     }
 
