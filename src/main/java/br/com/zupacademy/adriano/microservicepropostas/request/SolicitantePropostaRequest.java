@@ -1,6 +1,6 @@
 package br.com.zupacademy.adriano.microservicepropostas.request;
 
-import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoAnalise;
+import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoProposta;
 import br.com.zupacademy.adriano.microservicepropostas.model.Endereco;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.CPFORCNPJ;
@@ -36,10 +36,10 @@ public class SolicitantePropostaRequest {
     private double salario;
 
     @Enumerated
-    private EstadoAnalise analise;
+    private EstadoProposta analise;
 
     public SolicitanteProposta toModel(){
-        return new SolicitanteProposta(nome, salario, documento, endereco, email, analise);
+        return new SolicitanteProposta(nome, salario, documento, endereco, email);
     }
 
     public String getNome() {
@@ -62,7 +62,7 @@ public class SolicitantePropostaRequest {
         return salario;
     }
 
-    public EstadoAnalise getAnalise() {
+    public EstadoProposta getAnalise() {
         return analise;
     }
 }

@@ -4,6 +4,7 @@ import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionRespon
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,35 +24,34 @@ public class ExceptionValidacao {
         this.messageSource = messageSource;
     }
 
-    @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ExceptionResponse> handle(MethodArgumentNotValidException exception){
-
-        List<ExceptionResponse> responseList = new ArrayList<>();
-        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-
-        return buildValidationErrors(fieldErrors, responseList);
-    }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BindException.class)
-    public List<ExceptionResponse> handle(BindException exception){
-
-        List<ExceptionResponse> responseList = new ArrayList<>();
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public List<ExceptionResponse> handle(MethodArgumentNotValidException exception) {
+        List<ExceptionResponse> dto = new ArrayList<>();
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-
-        return buildValidationErrors(fieldErrors, responseList);
-    }
-
-    private List<ExceptionResponse> buildValidationErrors(List<FieldError> fieldErrors, List<ExceptionResponse> responseList) {
         fieldErrors.forEach(e -> {
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
             ExceptionResponse erro = new ExceptionResponse(e.getField(), mensagem);
-            responseList.add(erro);
+            dto.add(erro);
         });
 
-        return responseList;
+        return dto;
     }
 
 
-}
+    @ExceptionHandler(ExceptionErroApi.class)
+    public ResponseEntity<ExceptionDto> handleExceptionErroApi(ExceptionErroApi exception) {
+        ExceptionDto error = new ExceptionDto(exception.getField(), exception.getReason());
+
+        return ResponseEntity.status(exception.getHttpStatus()).body(error);
+    }
+
+
+
+
+
+    }
+
+
+

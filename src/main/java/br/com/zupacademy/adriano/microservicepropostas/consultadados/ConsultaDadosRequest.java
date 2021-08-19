@@ -6,14 +6,14 @@ public class ConsultaDadosRequest {
 
     private String documento;
     private String nome;
-    private Long idSolicitacao;
+    private String idSolicitacao;
 
     public ConsultaDadosRequest(){}
 
-    public ConsultaDadosRequest(SolicitanteProposta solicProposta) {
-        this.documento = solicProposta.getDocumento();
-        this.nome = solicProposta.getNome();
-        this.idSolicitacao = solicProposta.getId();
+    public ConsultaDadosRequest(String documento, String nome, String idSolicitacao) {
+        this.documento = documento;
+        this.nome = nome;
+        this.idSolicitacao = idSolicitacao;
     }
 
     public String getDocumento() {
@@ -24,7 +24,7 @@ public class ConsultaDadosRequest {
         return nome;
     }
 
-    public Long getIdSolicitacao() {
+    public String getIdSolicitacao() {
         return idSolicitacao;
     }
 }
