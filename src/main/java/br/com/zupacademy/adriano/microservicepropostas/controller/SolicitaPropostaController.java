@@ -1,14 +1,16 @@
 package br.com.zupacademy.adriano.microservicepropostas.controller;
 
 import br.com.zupacademy.adriano.microservicepropostas.consultadados.AnaliseSolicitante;
-import br.com.zupacademy.adriano.microservicepropostas.consultadados.ConsultaDadosResponse;
-import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoProposta;
-import br.com.zupacademy.adriano.microservicepropostas.geracartao.EstadoPropostaResponse;
+import br.com.zupacademy.adriano.microservicepropostas.response.ConsultaDadosResponse;
+import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionErroApi;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.repository.SolicitanteRepository;
-import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
-import br.com.zupacademy.adriano.microservicepropostas.validacao.VerificaProposta;
+import br.com.zupacademy.adriano.microservicepropostas.request.PropostaRequest;
+import br.com.zupacademy.adriano.microservicepropostas.response.EstadoPropostaResponse;
+import br.com.zupacademy.adriano.microservicepropostas.validacao.VerificaSolicitacaoProposta;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -19,52 +21,60 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/v1/solicitaProposta")
+@RequestMapping("/propostas")
 public class SolicitaPropostaController {
 
     @Autowired
     private SolicitanteRepository solicitanteRepository;
 
-    @Autowired
-    private VerificaProposta verificaProposta;
+  @Autowired
+  private AnaliseSolicitante analiseSolicitante;
 
     @Autowired
-    private AnaliseSolicitante analiseSolicitante;
+    private VerificaSolicitacaoProposta verifica;
 
     @InitBinder
     public void init(WebDataBinder binder) {
-       this.analiseSolicitante = analiseSolicitante;
+     this.analiseSolicitante = analiseSolicitante;
     }
 
     @PostMapping
-    public ResponseEntity<?> fazerProposta(@RequestBody @Valid SolicitantePropostaRequest req, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> fazerProposta(@RequestBody @Valid PropostaRequest req, UriComponentsBuilder uriBuilder){
         Optional<SolicitanteProposta> verificaPropostaa = solicitanteRepository.findByDocumento(req.getDocumento());
-
-           if(verificaPropostaa.isPresent())
-
+        if(verificaPropostaa.isPresent())
             return ResponseEntity.status(422).build();
 
-           SolicitanteProposta proposta = req.toModel();
+        SolicitanteProposta proposta = req.toModel();
 
-           solicitanteRepository.save(proposta);
+        solicitanteRepository.save(proposta);
 
-        ConsultaDadosResponse analisar = analiseSolicitante.enviar(proposta);
-        proposta.atualizarStatus(analisar.getResultadoConsulta());
-
+        try {
+            ConsultaDadosResponse analise = analiseSolicitante.solicitarAnalise(proposta.analisarSolicitante());
+            proposta.atualizarStatus(analise.getResultadoConsulta());
+            solicitanteRepository.save(proposta);
+        }
+        catch (FeignException e) {
+            throw new ExceptionErroApi(HttpStatus.BAD_REQUEST, "Erro ao analisar solicitante", "analise_solicitante");
+        }
             URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
             return ResponseEntity.created(uri).build();
         }
 
 
-    @GetMapping(path = "/{id}")
-    public EstadoPropostaResponse buscaEstadoProposta(@PathVariable("id") Long id) throws PropostaNotFoundException {
-        SolicitanteProposta proposta = solicitanteRepository.findById(id).orElseThrow(() -> new PropostaNotFoundException(id));
-        EstadoPropostaResponse response = new EstadoPropostaResponse(proposta.getId(), proposta.getNome(), proposta.getEstado());
-        return response;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EstadoPropostaResponse> statusProposta(@PathVariable Long id) {
+        Optional<SolicitanteProposta> propostaBanco = solicitanteRepository.findById(id);
+
+        if (propostaBanco.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(new EstadoPropostaResponse(propostaBanco.get()));
+    }
     }
 
 
 
 
-    }
+
 

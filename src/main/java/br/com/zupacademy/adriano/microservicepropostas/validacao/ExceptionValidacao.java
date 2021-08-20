@@ -1,11 +1,12 @@
-package br.com.zupacademy.adriano.microservicepropostas.exception;
+package br.com.zupacademy.adriano.microservicepropostas.validacao;
 
+import br.com.zupacademy.adriano.microservicepropostas.response.ExceptionDto;
+import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionErroApi;
 import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionResponse;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,17 +40,12 @@ public class ExceptionValidacao {
         return dto;
     }
 
-
     @ExceptionHandler(ExceptionErroApi.class)
-    public ResponseEntity<ExceptionDto> handleExceptionErroApi(ExceptionErroApi exception) {
+    public ResponseEntity<ExceptionDto> handleApiErroException(ExceptionErroApi exception) {
         ExceptionDto error = new ExceptionDto(exception.getField(), exception.getReason());
 
         return ResponseEntity.status(exception.getHttpStatus()).body(error);
     }
-
-
-
-
 
     }
 

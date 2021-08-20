@@ -12,14 +12,8 @@ public enum EstadoAnalise {
         public EstadoProposta toProposta() {
             return EstadoProposta.ELEGIVEL;
         }
-    },
-
-    APROVADO {
-        @Override
-        public EstadoProposta toProposta() {
-            return EstadoProposta.ELEGIVEL;
-        }
     };
+
 
     public abstract EstadoProposta toProposta();
 }

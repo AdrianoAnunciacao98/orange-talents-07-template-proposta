@@ -1,12 +1,11 @@
 package br.com.zupacademy.adriano.microservicepropostas.model;
 
+import br.com.zupacademy.adriano.microservicepropostas.consultadados.ConsultaDadosRequest;
 import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoAnalise;
 import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoProposta;
-import br.com.zupacademy.adriano.microservicepropostas.request.EnderecoRequest;
-import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class SolicitanteProposta {
@@ -24,25 +23,30 @@ public class SolicitanteProposta {
     @Column(nullable = false)
     private String documento;
 
-    @Embedded
-    private Endereco endereco;
+    @Column(nullable = false)
+    private String endereco;
 
     @Column(nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private EstadoProposta analise;
+    @NotNull
+    private EstadoProposta estadoProposta;
 
-    private String numeroCartao;
+
+    @OneToOne(mappedBy = "proposta", cascade = CascadeType.MERGE)
+    private Cartao cartao;
 
 
-    public SolicitanteProposta(String nome, double salario, String documento, Endereco endereco, String email) {
+
+
+    public SolicitanteProposta(String nome, double salario, String documento, String endereco, String email) {
         this.nome = nome;
         this.salario = salario;
         this.documento = documento;
         this.endereco = endereco;
         this.email = email;
-        this.analise = EstadoProposta.NAO_ELEGIVEL;
+        this.estadoProposta = EstadoProposta.NAO_ELEGIVEL;
     }
 
 
@@ -51,7 +55,7 @@ public class SolicitanteProposta {
     }
 
     public void atualizarStatus(EstadoAnalise analise) {
-        this.analise = analise.toProposta();
+        this.estadoProposta = analise.toProposta();
     }
 
     public String getNome() {
@@ -62,9 +66,26 @@ public class SolicitanteProposta {
         return documento;
     }
 
-    public void insereNumeroCartao(String numeroCartao) {
-        @Size(min = 19, max = 19)
-        String cartao = numeroCartao;
-        this.numeroCartao = cartao;
+    public ConsultaDadosRequest analisarSolicitante(){
+        return new ConsultaDadosRequest(documento, nome, id.toString());
     }
+
+
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public EstadoProposta getAnalise() {
+        return estadoProposta;
+    }
+
 }
