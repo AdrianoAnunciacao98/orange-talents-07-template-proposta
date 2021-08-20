@@ -70,6 +70,8 @@ public class SolicitanteProposta {
         return new ConsultaDadosRequest(documento, nome, id.toString());
     }
 
+    @Deprecated
+    public SolicitanteProposta(){}
 
 
     public double getSalario() {
