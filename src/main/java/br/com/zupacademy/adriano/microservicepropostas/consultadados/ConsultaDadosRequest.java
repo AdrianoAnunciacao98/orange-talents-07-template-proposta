@@ -6,14 +6,14 @@ public class ConsultaDadosRequest {
 
     private String documento;
     private String nome;
-    private String idSolicitacao;
+    private String idProposta;
 
     public ConsultaDadosRequest(){}
 
-    public ConsultaDadosRequest(String documento, String nome, String idSolicitacao) {
+    public ConsultaDadosRequest(String documento, String nome, String idProposta) {
         this.documento = documento;
         this.nome = nome;
-        this.idSolicitacao = idSolicitacao;
+        this.idProposta = idProposta;
     }
 
     public String getDocumento() {
@@ -24,7 +24,7 @@ public class ConsultaDadosRequest {
         return nome;
     }
 
-    public String getIdSolicitacao() {
-        return idSolicitacao;
+    public String getIdProposta() {
+        return idProposta;
     }
 }

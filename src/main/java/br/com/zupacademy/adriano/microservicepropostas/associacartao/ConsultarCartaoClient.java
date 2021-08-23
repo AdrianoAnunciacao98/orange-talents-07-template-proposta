@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name="cartoes", url = "http://localhost:8888")
 public interface ConsultarCartaoClient {
+
     @GetMapping("/api/cartoes")
     DadosCartaoResponse consultarCartaoByProposta(@RequestParam String idProposta);
 }

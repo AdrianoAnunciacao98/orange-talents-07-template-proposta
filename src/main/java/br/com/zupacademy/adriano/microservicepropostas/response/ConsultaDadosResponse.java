@@ -6,8 +6,8 @@ public class ConsultaDadosResponse {
 
     private String nome;
     private String documento;
-    private String idSolicitacao;
-    private EstadoAnalise resultadoConsulta;
+    private String idProposta;
+    private EstadoAnalise resultadoSolicitacao;
 
     public String getNome() {
         return nome;
@@ -17,11 +17,11 @@ public class ConsultaDadosResponse {
         return documento;
     }
 
-    public String getIdSolicitacao() {
-        return idSolicitacao;
+    public String getIdProposta() {
+        return idProposta;
     }
 
-    public EstadoAnalise getResultadoConsulta() {
-        return resultadoConsulta;
+    public EstadoAnalise getResultadoSolicitacao() {
+        return resultadoSolicitacao;
     }
 }

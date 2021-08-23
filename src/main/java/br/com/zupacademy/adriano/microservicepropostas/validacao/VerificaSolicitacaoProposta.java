@@ -3,7 +3,7 @@ package br.com.zupacademy.adriano.microservicepropostas.validacao;
 import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionErroApi;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.repository.SolicitanteRepository;
-import br.com.zupacademy.adriano.microservicepropostas.request.PropostaRequest;
+import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class VerificaSolicitacaoProposta implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return PropostaRequest.class.isAssignableFrom(aClass);
+        return SolicitantePropostaRequest.class.isAssignableFrom(aClass);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class VerificaSolicitacaoProposta implements Validator {
         if(errors.hasErrors())
             return;
 
-        PropostaRequest request = (PropostaRequest) o;
+        SolicitantePropostaRequest request = (SolicitantePropostaRequest) o;
 
         Optional<SolicitanteProposta> propostaBanco = repository.findByDocumento(request.getDocumento());
 

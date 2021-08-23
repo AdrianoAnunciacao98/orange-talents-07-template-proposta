@@ -1,11 +1,11 @@
 package br.com.zupacademy.adriano.microservicepropostas.controller;
 
 import br.com.zupacademy.adriano.microservicepropostas.consultadados.AnaliseSolicitante;
+import br.com.zupacademy.adriano.microservicepropostas.request.SolicitantePropostaRequest;
 import br.com.zupacademy.adriano.microservicepropostas.response.ConsultaDadosResponse;
 import br.com.zupacademy.adriano.microservicepropostas.exception.ExceptionErroApi;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.repository.SolicitanteRepository;
-import br.com.zupacademy.adriano.microservicepropostas.request.PropostaRequest;
 import br.com.zupacademy.adriano.microservicepropostas.response.EstadoPropostaResponse;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.VerificaSolicitacaoProposta;
 import feign.FeignException;
@@ -39,7 +39,7 @@ public class SolicitaPropostaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> fazerProposta(@RequestBody @Valid PropostaRequest req, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> fazerProposta(@RequestBody @Valid SolicitantePropostaRequest req, UriComponentsBuilder uriBuilder){
         Optional<SolicitanteProposta> verificaPropostaa = solicitanteRepository.findByDocumento(req.getDocumento());
         if(verificaPropostaa.isPresent())
             return ResponseEntity.status(422).build();
@@ -50,7 +50,7 @@ public class SolicitaPropostaController {
 
         try {
             ConsultaDadosResponse analise = analiseSolicitante.solicitarAnalise(proposta.analisarSolicitante());
-            proposta.atualizarStatus(analise.getResultadoConsulta());
+            proposta.atualizarStatus(analise.getResultadoSolicitacao());
             solicitanteRepository.save(proposta);
         }
         catch (FeignException e) {
@@ -63,7 +63,7 @@ public class SolicitaPropostaController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadoPropostaResponse> statusProposta(@PathVariable Long id) {
+    public ResponseEntity<EstadoPropostaResponse> EstadoProposta(@PathVariable Long id) {
         Optional<SolicitanteProposta> propostaBanco = solicitanteRepository.findById(id);
 
         if (propostaBanco.isEmpty())

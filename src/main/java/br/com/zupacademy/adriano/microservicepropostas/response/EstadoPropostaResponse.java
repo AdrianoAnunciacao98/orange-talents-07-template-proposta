@@ -11,15 +11,39 @@ public class EstadoPropostaResponse {
     private String documento;
     private String email;
     private String endereco;
-    private Double salario;
+    private BigDecimal salario;
 
 
-    public EstadoPropostaResponse(SolicitanteProposta proposta) {
+    public EstadoPropostaResponse(SolicitanteProposta sp) {
         this.status = status;
-        this.nome = proposta.getNome();
-        this.documento = proposta.getDocumento();
-        this.email = proposta.getEmail();
-        this.endereco = proposta.getEndereco();
-        this.salario = proposta.getSalario();
+        this.nome = sp.getNome();
+        this.documento = sp.getDocumento();
+        this.email = sp.getEmail();
+        this.endereco = sp.getEndereco();
+        this.salario = sp.getSalario();
+    }
+
+    public EstadoProposta getStatus() {
+        return status;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
     }
 }

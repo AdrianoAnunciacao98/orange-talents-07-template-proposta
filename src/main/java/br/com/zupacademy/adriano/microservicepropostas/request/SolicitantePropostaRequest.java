@@ -3,12 +3,10 @@ package br.com.zupacademy.adriano.microservicepropostas.request;
 import br.com.zupacademy.adriano.microservicepropostas.model.SolicitanteProposta;
 import br.com.zupacademy.adriano.microservicepropostas.validacao.CPFORCNPJ;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
-public class PropostaRequest {
+public class SolicitantePropostaRequest {
 
     @NotBlank
     @CPFORCNPJ
@@ -25,12 +23,8 @@ public class PropostaRequest {
     private String endereco;
 
     @NotNull
-    @Positive
-    private Double salario;
-
-    public SolicitanteProposta toModel() {
-        return new SolicitanteProposta(nome, salario, documento, endereco, email);
-    }
+    @PositiveOrZero
+    private BigDecimal salario;
 
     public String getDocumento() {
         return documento;
@@ -48,7 +42,11 @@ public class PropostaRequest {
         return endereco;
     }
 
-    public Double getSalario() {
+    public BigDecimal getSalario() {
         return salario;
+    }
+
+    public SolicitanteProposta toModel(){
+        return new SolicitanteProposta(nome, salario, documento, endereco, email);
     }
 }

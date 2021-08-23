@@ -6,6 +6,7 @@ import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoProposta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 public class SolicitanteProposta {
@@ -18,7 +19,7 @@ public class SolicitanteProposta {
     private String nome;
 
     @Column(nullable = false)
-    private double salario;
+    private BigDecimal salario;
 
     @Column(nullable = false)
     private String documento;
@@ -40,7 +41,7 @@ public class SolicitanteProposta {
 
 
 
-    public SolicitanteProposta(String nome, double salario, String documento, String endereco, String email) {
+    public SolicitanteProposta(String nome, BigDecimal salario, String documento, String endereco, String email) {
         this.nome = nome;
         this.salario = salario;
         this.documento = documento;
@@ -74,7 +75,7 @@ public class SolicitanteProposta {
     public SolicitanteProposta(){}
 
 
-    public double getSalario() {
+    public BigDecimal getSalario() {
         return salario;
     }
 
@@ -89,5 +90,7 @@ public class SolicitanteProposta {
     public EstadoProposta getAnalise() {
         return estadoProposta;
     }
+
+
 
 }
