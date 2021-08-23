@@ -42,6 +42,10 @@ services:
       URL_DATABASE: jdbc:postgresql://postgres-proposta:5433/propostas
       DB_USER: admin
       DB_PASSWORD: 123
+      ANALISE_HOST: http://analise:9999
+      CARTAO_HOST: http://contas:8888
+      KEYCLOAK_ISSUER_URI: http://localhost:18080/auth/realms
+      KEYCLOAK_JWKS_URI: http://localhost:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
     depends_on:
       - postgres-proposta
 
