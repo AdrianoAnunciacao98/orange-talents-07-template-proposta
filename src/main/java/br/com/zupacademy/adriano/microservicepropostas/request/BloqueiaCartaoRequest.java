@@ -14,4 +14,6 @@ public class BloqueiaCartaoRequest {
     public String getSistemaBloqueio() {
         return sistemaBloqueio;
     }
+
+    public BloqueiaCartaoRequest(){}
 }

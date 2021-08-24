@@ -1,12 +1,14 @@
 package br.com.zupacademy.adriano.microservicepropostas.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import br.com.zupacademy.adriano.microservicepropostas.enums.EstadoCartao;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import static br.com.zupacademy.adriano.microservicepropostas.enums.EstadoCartao.*;
 
 @Entity
 public class Cartao {
@@ -27,6 +29,14 @@ public class Cartao {
     @ManyToOne
     private SolicitanteProposta proposta;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EstadoCartao estado;
+
+
+    public void bloqueioConfirmadoNoLegado() {
+        this.estado = BLOQUEADO;
+    }
 
     public Cartao(String id, LocalDateTime emitidoEm, String titular, BigDecimal limite, SolicitanteProposta proposta) {
         this.id = id;
@@ -34,6 +44,7 @@ public class Cartao {
         this.titular = titular;
         this.limite = limite;
         this.proposta = proposta;
+        this.estado = ATIVO;
     }
 
     public String getId() {
@@ -65,5 +76,9 @@ public class Cartao {
                 ", limite=" + limite +
                 ", proposta=" + proposta +
                 '}';
+    }
+
+    public boolean estaBloqueado() {
+        return estado.equals(BLOQUEADO) || estado.equals(BLOQUEIO_PENDENTE);
     }
 }
