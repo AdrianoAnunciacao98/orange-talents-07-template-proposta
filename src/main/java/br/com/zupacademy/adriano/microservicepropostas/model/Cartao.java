@@ -7,8 +7,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static br.com.zupacademy.adriano.microservicepropostas.enums.EstadoCartao.*;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 public class Cartao {
@@ -32,6 +35,9 @@ public class Cartao {
     @NotNull
     @Enumerated(EnumType.STRING)
     private EstadoCartao estado;
+
+
+
 
 
     public void bloqueioConfirmadoNoLegado() {
@@ -80,5 +86,9 @@ public class Cartao {
 
     public boolean estaBloqueado() {
         return estado.equals(BLOQUEADO) || estado.equals(BLOQUEIO_PENDENTE);
+    }
+
+    public void fazAviso( Aviso aviso) {
+  //      this.avisos.add(aviso);
     }
 }
