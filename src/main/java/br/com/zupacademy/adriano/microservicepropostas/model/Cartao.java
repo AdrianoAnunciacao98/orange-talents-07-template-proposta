@@ -36,6 +36,7 @@ public class Cartao {
     @Enumerated(EnumType.STRING)
     private EstadoCartao estado;
 
+    private String numero;
 
 
 
@@ -88,7 +89,11 @@ public class Cartao {
         return estado.equals(BLOQUEADO) || estado.equals(BLOQUEIO_PENDENTE);
     }
 
-    public void fazAviso( Aviso aviso) {
+    public String getNumero() {
+        return numero;
+    }
+
+    public void fazAviso(Aviso aviso) {
   //      this.avisos.add(aviso);
     }
 }
