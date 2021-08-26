@@ -1,6 +1,7 @@
 package br.com.zupacademy.adriano.microservicepropostas.associacartao;
 
 import br.com.zupacademy.adriano.microservicepropostas.config.ResultadoResponse;
+import br.com.zupacademy.adriano.microservicepropostas.geracartao.AvisoViagemRequest;
 import br.com.zupacademy.adriano.microservicepropostas.request.BloqueiaCartaoRequest;
 import br.com.zupacademy.adriano.microservicepropostas.response.BloqueiaCartaoResponse;
 import br.com.zupacademy.adriano.microservicepropostas.response.ConsultaDadosResponse;
@@ -19,4 +20,6 @@ public interface ConsultarCartaoClient {
     BloqueiaCartaoResponse bloquearCartao(@PathVariable String id, @RequestBody @Valid BloqueiaCartaoRequest request);
     @PostMapping(value = "/cartoes/{id}/bloqueios")
     ResultadoResponse solicitaBloqueio(@PathVariable String id, @RequestBody BloqueiaCartaoRequest request);
+    @PostMapping(value = "/cartoes/{id}/avisos")
+    ResultadoResponse avisa(@PathVariable String id, @RequestBody @Valid AvisoViagemRequest request);
 }
