@@ -17,12 +17,16 @@ public interface ConsultarCartaoClient {
 
     @GetMapping("/api/cartoes")
     DadosCartaoResponse consultarCartaoByProposta(@RequestParam String idProposta);
+
     @PostMapping("/api/cartoes/{id}/bloqueios")
     BloqueiaCartaoResponse bloquearCartao(@PathVariable String id, @RequestBody @Valid BloqueiaCartaoRequest request);
+
     @PostMapping(value = "/cartoes/{id}/bloqueios")
     ResultadoResponse solicitaBloqueio(@PathVariable String id, @RequestBody BloqueiaCartaoRequest request);
+
     @PostMapping(value = "/cartoes/{id}/avisos")
     ResultadoResponse avisa(@PathVariable String id, @RequestBody @Valid AvisoViagemRequest request);
+
     @PostMapping(value = "/cartoes/{id}/carteiras")
     ResultadoResponse associaCarteira(@PathVariable String id, @RequestBody @Valid CarteiraRequest request);
 }

@@ -46,10 +46,10 @@ public class BloqueiaCartaoController {
             BloqueiaCartaoResponse bloqueioResponse = consulta.bloquearCartao(id, bloqueioRequest);
 
             if(bloqueioResponse.getEstado().equals(EstadoBloqueio.BLOQUEADO)){
-                BloqueiaCartao bloqueio = bloqueioResponse.toModel(cartaoRep, request, cartaoBanco.get());
-                bloqueioRepository.save(bloqueio);
-            }
-            else
+               BloqueiaCartao bloqueio = bloqueioResponse.toModel(cartaoRep, request, cartaoBanco.get());
+              bloqueioRepository.save(bloqueio);
+           }
+           else
                 throw new ExceptionErroApi(422, "Não foi possível realizar bloqueio", "request");
         }catch (FeignException e){
             return ResponseEntity.status(422).body(new ExceptionDto("request", "Não foi possível realizar bloqueio"));
