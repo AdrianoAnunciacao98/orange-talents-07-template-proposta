@@ -10,7 +10,7 @@ public class DocLimpo {
         private String doc;
 
         @Valid
-        public DocLimpo(@NotBlank String doc) {
+        public  DocLimpo(String doc) {
             this.doc = doc;
         }
 
@@ -18,4 +18,4 @@ public class DocLimpo {
             return new BCryptPasswordEncoder().encode(doc);
         }
     }
-}
+
