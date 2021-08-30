@@ -28,8 +28,8 @@ public class BloqueiaCartaoLegado {
         private ConsultarCartaoClient cartaoClient;
 
         @Scheduled(fixedDelay = 5 * TimeConfig.SEGUNDO)
-        private void bloqueiaCartoes() {
-            Pageable paginacao = PageRequest.ofSize(10);
+        public void bloqueiaCartoes() {
+            Pageable paginacao = PageRequest.of(0,10);
             Page<Cartao> paginaDeCartoes = cartaoRepository.findAllByEstado(BLOQUEIO_PENDENTE, paginacao);
 
             while(paginaDeCartoes.hasNext()) {
